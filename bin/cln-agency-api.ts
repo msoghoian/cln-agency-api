@@ -1,20 +1,26 @@
-#!/usr/bin/env node
-import * as cdk from 'aws-cdk-lib';
-import { ClnAgencyApiStack } from '../lib/cln-agency-api-stack';
+// bin/app.ts
+import { App, StackProps, Tags } from 'aws-cdk-lib';
+import { StageConfig, StageName, STAGES } from '@config/stages';
+import { ClnAgencyApiStack } from '@lib/cln-agency-api-stack';
 
-const app = new cdk.App();
-new ClnAgencyApiStack(app, 'ClnAgencyApiStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
+const app = new App();
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+// accept: `-c stage=dev` or `-c stage=prod`
+const stageName: StageName = app.node.tryGetContext('stage') ?? 'dev';
+const cfg: StageConfig = STAGES[stageName];
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+const clnAgencyApiStack = new ClnAgencyApiStack(
+  app,
+  `cln-agency-api-${stageName}`,
+  {
+    env: { account: cfg.account, region: cfg.region },
+    stackName: `cln-agency-api-${stageName}`,
+    description: `California Local News Agency API (${stageName})`,
+    stageName,
+  } as StackProps & { stageName: StageName },
+);
 
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
-});
+Tags.of(clnAgencyApiStack).add('project', 'cln-agency-api');
+Tags.of(clnAgencyApiStack).add('stage', stageName);
+
+app.synth();
