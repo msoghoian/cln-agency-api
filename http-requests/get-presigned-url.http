@@ -1,0 +1,47 @@
+### GET presigned URL for uploading a file
+
+### FPD - Get presigned URL
+GET {{baseUrl}}/agency/presigned-url/FPD-9-3-2025.xlsx
+Accept: application/json
+
+> {%
+client.global.set("fpdUploadUrl", response.body.signedUrl);
+%}
+
+### FPD - Upload file using presigned URL
+PUT {{fpdUploadUrl}}
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< ./testFiles/FPD-9-3-2025.xlsx
+
+###
+
+### FSO - Get presigned URL
+GET {{baseUrl}}/agency/presigned-url/FSO-9-4-2025.xlsx
+Accept: application/json
+
+> {%
+client.global.set("fsoUploadUrl", response.body.signedUrl);
+%}
+
+### FSO - Upload file using presigned URL
+PUT {{fsoUploadUrl}}
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< ./testFiles/FSO-9-4-2025.xlsx
+
+###
+
+### KCSO - Get presigned URL
+GET {{baseUrl}}/agency/presigned-url/KCSO-9-4-2025.pdf
+Accept: application/json
+
+> {%
+client.global.set("kcsoUploadUrl", response.body.signedUrl);
+%}
+
+### KCSO - Upload file using presigned URL
+PUT {{kcsoUploadUrl}}
+Content-Type: application/pdf
+
+< ./testFiles/KCSO-9-4-2025.pdf

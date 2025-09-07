@@ -6,7 +6,12 @@ import { ClnAgencyApiStack } from '@lib/cln-agency-api-stack';
 const app = new App();
 
 // accept: `-c stage=dev` or `-c stage=prod`
-const stageName: StageName = app.node.tryGetContext('stage') ?? 'dev';
+const stageName: StageName = app.node.tryGetContext('stage');
+
+if (!stageName) {
+  throw new Error('stage is required: -c stage=dev or -c stage=prod');
+}
+
 const cfg: StageConfig = STAGES[stageName];
 
 const clnAgencyApiStack = new ClnAgencyApiStack(

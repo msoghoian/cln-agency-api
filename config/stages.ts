@@ -1,4 +1,4 @@
-type StageName = 'dev'; // | "test" | "prod";
+type StageName = 'dev' | 'test' | 'prod';
 
 interface StageConfig {
   account: string;
@@ -7,11 +7,9 @@ interface StageConfig {
 }
 
 const STAGES: Record<StageName, StageConfig> = {
-  dev: { account: '551247846760', region: 'us-west-2' },
-  // test: { account: "222222222222", region: "us-west-2", domain: "test.cln.example",
-  //   tags: { Stage: "test", App: "cln-agency" } },
-  // prod: { account: "333333333333", region: "us-west-2", domain: "cln.example",
-  //   tags: { Stage: "prod", App: "cln-agency" } },
+  dev: { account: '246766637628', region: 'us-west-2' },
+  test: { account: '167517641606', region: 'us-west-2' },
+  prod: { account: '437073839480', region: 'us-west-2' },
 };
 
 export { StageName, StageConfig, STAGES };
